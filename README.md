@@ -19,12 +19,12 @@
 ---
 
 > [!IMPORTANT]
-> 本仓库是 Amane 的**发行与用户文档仓库**。开发源码、内部构建文档和发布基础设施不对外公开。
+> 本仓库是 Amane 的**发行与用户文档仓库**。
 >
 > - 上游开源项目：[sqzw-x/amane](https://github.com/sqzw-x/amane)
-> - 容器镜像目标名称：`ghcr.io/zipenok/amane`
+> - 容器镜像：`ghcr.io/zipenok/amane`
 >
-> 镜像需要先在本仓库 Actions 中运行一次 `Publish container` 工作流。桌面版、Android 与 CLI 产物统一通过本仓库 Releases 发布。
+> 桌面版、Android 与 CLI 产物通过本仓库 Releases 发布。
 
 ## Amane 是什么
 
@@ -214,12 +214,11 @@ docker compose up -d
 - [安装与升级](docs/installation.md)
 - [首次使用](docs/quickstart.md)
 - [与上游原版的主要区别](docs/differences.md)
-- [Packages 与镜像发布](docs/packages.md)
 - [故障排查](docs/troubleshooting.md)
 
 ## 项目关系
 
-- **本仓库**：发行说明、用户文档、`compose.yaml`、容器发布工作流
+- **本仓库**：发行说明、用户文档与 `compose.yaml`
 - **上游项目**：`sqzw-x/amane` 是项目最初的开源实现
 
 该发行版包含个人维护者新增或调整的功能，因此行为可能与本仓库以外的版本不同。

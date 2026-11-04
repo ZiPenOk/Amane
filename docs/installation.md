@@ -16,7 +16,7 @@
 ## Docker 安装
 
 > [!NOTE]
-> 容器镜像由本仓库的 `Publish container` workflow 发布到 `ghcr.io/zipenok/amane`。如果首次拉取提示不存在，请先在 Actions 中手动运行该工作流。
+> Docker 镜像：`ghcr.io/zipenok/amane`。
 
 ### 1. 准备目录
 
