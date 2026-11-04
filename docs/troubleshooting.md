@@ -9,6 +9,24 @@
 3. 镜像名是小写：`ghcr.io/zipenok/amane`。
 4. 没有混用其它项目的历史镜像名。
 
+## `Publish container` 报 Git exit code 128
+
+该错误表示 workflow 无法检出内部源码仓库。检查 Repository secrets：
+
+- `SOURCE_REPOSITORY` 是否存在，格式必须是 `owner/repo`
+- `SOURCE_REPO_TOKEN` 是否存在且未过期
+- Token 是否明确授权给目标源码仓库
+- 权限是否至少包含 `Contents: Read`
+- 输入的 `source_ref` 是否是源码仓库中存在的分支或 tag
+
+当前 workflow 会先调用 GitHub API 检查 Token 对源码仓库的访问权限。如果这里失败，会显示：
+
+```text
+SOURCE_REPO_TOKEN cannot access SOURCE_REPOSITORY
+```
+
+修复 Secrets 后重新运行 `Publish container`。修改 Secret 不会影响已经失败的旧运行，必须新建一次 workflow run。
+
 ## 登录时不知道 API Token
 
 Docker：
