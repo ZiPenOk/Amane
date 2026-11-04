@@ -60,4 +60,5 @@
 - 配置多个刮削来源和字段优先级
 - 使用字段锁定保护手工修订
 - 在“设置 → 媒体服务器”中配置 Emby / Jellyfin
+- 需要从 115 或 JavBus / JavDB / JavLibrary 直接推送入库时，按 [浏览器脚本与 Amane 入库](browser-script.md) 安装脚本
 - 需要自然语言操作时使用首页智能体或 Amane CLI

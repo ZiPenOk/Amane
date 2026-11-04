@@ -12,7 +12,7 @@
 [![Container](https://img.shields.io/badge/container-ghcr.io%2Fzipenok%2Famane-2496ED?logo=docker&logoColor=white)](https://github.com/ZiPenOk/Amane/pkgs/container/amane)
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
-[安装说明](docs/installation.md) · [快速开始](docs/quickstart.md) · [版本差异](docs/differences.md) · [文档目录](docs/README.md) · [下载](https://github.com/ZiPenOk/Amane/releases)
+[安装说明](docs/installation.md) · [浏览器脚本](docs/browser-script.md) · [快速开始](docs/quickstart.md) · [版本差异](docs/differences.md) · [文档目录](docs/README.md) · [下载](https://github.com/ZiPenOk/Amane/releases)
 
 </div>
 
@@ -60,6 +60,7 @@ Amane **不是** Emby / Jellyfin 的替代品，而是它们的元数据补充�
 | 方向 | 本发行版的主要差异 |
 |---|---|
 | **115 / Amane 入库** | 提供从 115 认证、存储浏览、已有文件导入、离线下发、远端整理到 STRM / Emby 收尾的完整工作流，并支持按媒体库配置命名模板 |
+| **浏览器脚本入库** | 通过 JAV 老司机脚本从 115 文件页或 JavBus / JavDB / JavLibrary 直接提交 Amane 入库任务 |
 | **STRM 管理** | 独立管理连接、计划、运行和逐条日志；支持 TMDB 识别、批量改名预览、两阶段执行、撤销、终止与残留清理 |
 | **媒体修正** | 可统一修正发布标记、条目类型、115 远端路径、本地 STRM、NFO / 图片和 Emby 映射 |
 | **播放与字幕** | 支持 STRM 直连播放、Emby 302 网关、字幕搜索、预览、加载、下载和位置调整 |
@@ -209,9 +210,12 @@ docker compose up -d
 
 启动后访问 `http://<主机地址>:8016`。API Token 位于宿主机数据目录的 `data/token`，也可以从容器日志获取。
 
+需要从 115 或 JavBus / JavDB / JavLibrary 页面直接推送入库时，参见 [浏览器脚本与 Amane 入库](docs/browser-script.md)。
+
 ## 文档
 
 - [安装与升级](docs/installation.md)
+- [浏览器脚本与 Amane 入库](docs/browser-script.md)
 - [首次使用](docs/quickstart.md)
 - [与上游原版的主要区别](docs/differences.md)
 - [故障排查](docs/troubleshooting.md)
