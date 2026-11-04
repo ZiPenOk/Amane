@@ -199,13 +199,78 @@ Amane **不是** Emby / Jellyfin 的替代品，而是它们的元数据补充�
 
 ### Docker 快速开始
 
+克隆发行仓库并进入目录：
+
 ```bash
 git clone https://github.com/ZiPenOk/Amane.git
 cd Amane
-cp .env.example .env
-# 编辑 .env 与 compose.yaml 中的媒体目录
+```
+
+创建 `.env`。Linux 下建议先执行 `id -u` 与 `id -g`，把结果写入 `UID` 和 `GID`：
+
+```dotenv
+# 容器运行用户的 UID/GID；Linux 下建议与宿主机用户一致
+UID=1000
+GID=1000
+```
+
+仓库中的 `compose.yaml` 内容如下：
+
+```yaml
+services:
+  amane:
+    image: ghcr.io/zipenok/amane:latest
+    container_name: amane
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      - "8016:8016"
+      # 可选的 Emby 302 网关
+      - "8017:8017"
+    volumes:
+      - ./data:/data
+      - /path/to/media:/media
+    environment:
+      - AMANE_PORT=8016
+      - AMANE_DATA_DIR=/data
+      - AMANE_SAFE_DIRS=/media
+      - AMANE_SUPERVISED=1
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import http.client, os, sys;
+          port = int(os.environ.get("AMANE_PORT", "8016"));
+          conn = http.client.HTTPConnection("127.0.0.1", port, timeout=3);
+          conn.request("GET", "/api/health");
+          sys.exit(0 if conn.getresponse().status == 200 else 1)
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+```
+
+启动前至少修改：
+
+- `/path/to/media`：替换为宿主机媒体目录。
+- `AMANE_SAFE_DIRS`：填写容器内允许访问的媒体路径。多个路径用逗号分隔。
+- 只使用元数据、不管理本地文件时，删除媒体目录挂载和 `AMANE_SAFE_DIRS`。
+
+创建数据目录并启动：
+
+```bash
+mkdir -p data
 docker compose pull
 docker compose up -d
+docker compose ps
+```
+
+查看日志：
+
+```bash
+docker compose logs -f amane
 ```
 
 启动后访问 `http://<主机地址>:8016`。API Token 位于宿主机数据目录的 `data/token`，也可以从容器日志获取。

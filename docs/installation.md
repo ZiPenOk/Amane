@@ -23,7 +23,6 @@
 ```bash
 git clone https://github.com/ZiPenOk/Amane.git
 cd Amane
-cp .env.example .env
 mkdir -p data
 ```
 
@@ -35,9 +34,55 @@ Linux 下建议让容器用户与宿主机用户一致，避免写入的数据�
 printf 'UID=%s\nGID=%s\n' "$(id -u)" "$(id -g)" > .env
 ```
 
+生成的 `.env` 内容示例：
+
+```dotenv
+# 容器运行用户的 UID/GID；Linux 下建议与宿主机用户一致
+UID=1000
+GID=1000
+```
+
 Windows Docker Desktop 可以直接使用默认的 `1000:1000`，或按实际挂载权限调整。
 
-### 3. 修改 `compose.yaml`
+### 3. 创建 `compose.yaml`
+
+仓库中的 `compose.yaml` 内容如下：
+
+```yaml
+services:
+  amane:
+    image: ghcr.io/zipenok/amane:latest
+    container_name: amane
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      - "8016:8016"
+      # 可选的 Emby 302 网关
+      - "8017:8017"
+    volumes:
+      - ./data:/data
+      - /path/to/media:/media
+    environment:
+      - AMANE_PORT=8016
+      - AMANE_DATA_DIR=/data
+      - AMANE_SAFE_DIRS=/media
+      - AMANE_SUPERVISED=1
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import http.client, os, sys;
+          port = int(os.environ.get("AMANE_PORT", "8016"));
+          conn = http.client.HTTPConnection("127.0.0.1", port, timeout=3);
+          conn.request("GET", "/api/health");
+          sys.exit(0 if conn.getresponse().status == 200 else 1)
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+```
 
 至少检查以下内容：
 
@@ -49,7 +94,7 @@ Windows Docker Desktop 可以直接使用默认的 `1000:1000`，或按实际挂
 
 有多个媒体目录时逐个挂载，并把所有容器内路径写入 `AMANE_SAFE_DIRS`，以逗号分隔。
 
-只使用元数据、不管理本地文件时，可以删除媒体目录挂载。
+只使用元数据、不管理本地文件时，可以删除媒体目录挂载与 `AMANE_SAFE_DIRS`。
 
 ### 4. 启动
 
