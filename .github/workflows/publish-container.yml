@@ -14,7 +14,7 @@ on:
       platforms:
         description: "构建平台"
         required: true
-        default: linux/amd64
+        default: linux/amd64,linux/arm64
       latest:
         description: "同时更新 latest 标签"
         required: true
@@ -61,6 +61,9 @@ jobs:
           token: ${{ secrets.SOURCE_REPO_TOKEN }}
           persist-credentials: false
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
@@ -95,7 +98,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: ${{ inputs.platforms || 'linux/amd64' }}
+          platforms: ${{ inputs.platforms || 'linux/amd64,linux/arm64' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
