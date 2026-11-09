@@ -8,9 +8,9 @@ on:
         required: true
         default: dev
       version:
-        description: "镜像版本，例如 0.25.0"
+        description: "镜像版本，例如 0.26.0"
         required: true
-        default: 0.25.0
+        default: 0.26.0
       platforms:
         description: "构建平台"
         required: true
