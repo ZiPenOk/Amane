@@ -11,10 +11,13 @@ services:
       - ./data:/data
       - /path/to/media:/media
     environment:
-      - AMANE_PORT=8016
-      - AMANE_DATA_DIR=/data
-      - AMANE_SAFE_DIRS=/media
-      - AMANE_SUPERVISED=1
+      AMANE_PORT: "8016"
+      AMANE_DATA_DIR: "/data"
+      AMANE_SAFE_DIRS: "/media"
+      AMANE_SUPERVISED: "1"
+      # 可选：限制 glibc 的内存 Arena 数量，减少多线程运行后滞留在进程中的内存。
+      # 默认注释掉；仅在内存长期不回落时启用，修改后需重建容器才会生效。
+      # MALLOC_ARENA_MAX: "2"
     restart: unless-stopped
     healthcheck:
       test:
